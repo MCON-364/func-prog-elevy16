@@ -2,6 +2,7 @@ package edu.touro.las.mcon364.func_prog.exercises;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -39,8 +40,9 @@ public class FunctionalInterfaceExercises {
      *
      */
     public static Supplier<Integer> currentYearSupplier() {
-      // TODO
-        return null;
+
+        Supplier<Integer> currentDate = () ->  LocalDate.now().getYear();
+        return currentDate;
     }
 
     /**
@@ -48,9 +50,10 @@ public class FunctionalInterfaceExercises {
      * between 1 and 100.
      */
     public static Supplier<Integer> randomScoreSupplier() {
-        // TODO
-        return null;
-    }
+
+        Supplier<Integer> randomScore = () ->  ThreadLocalRandom.current().nextInt(1, 100);
+        return randomScore;
+     }
 
     // =========================================================
     // PART 2 — PREDICATES
@@ -61,8 +64,9 @@ public class FunctionalInterfaceExercises {
      * a string is all uppercase.
      */
     public static Predicate<String> isAllUpperCase() {
-        // TODO
-        return null;
+
+        Predicate<String> isAllUpperCase = s -> s.equals(s.toUpperCase());
+        return isAllUpperCase;
     }
 
     /**
@@ -72,8 +76,11 @@ public class FunctionalInterfaceExercises {
      * Hint: consider chaining.
      */
     public static Predicate<Integer> positiveAndDivisibleByFive() {
-        // TODO
-        return null;
+
+        Predicate<Integer> isPositive = x -> x > 0;
+        Predicate<Integer> isDivisibleByFive = x -> x % 5 == 0;
+        Predicate<Integer> isPositiveAndDivisibleByFive = isPositive.and(isDivisibleByFive);
+        return isPositiveAndDivisibleByFive;
     }
 
     // =========================================================
@@ -87,8 +94,9 @@ public class FunctionalInterfaceExercises {
      * Formula: F = C * 9/5 + 32
      */
     public static Function<Double, Double> celsiusToFahrenheit() {
-        // TODO
-        return null;
+
+        Function<Double, Double> celsiusToFahrenheit = c -> c * 9/5 + 32;
+        return celsiusToFahrenheit;
     }
 
     /**
@@ -98,8 +106,7 @@ public class FunctionalInterfaceExercises {
      * Bonus: Make it case-insensitive.
      */
     public static Function<String, Integer> countVowels() {
-        // TODO
-        return null;
+
     }
 
     // =========================================================
