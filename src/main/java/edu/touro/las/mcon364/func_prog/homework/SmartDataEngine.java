@@ -1,7 +1,10 @@
 package edu.touro.las.mcon364.func_prog.homework;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.*;
 
 /**
@@ -44,7 +47,11 @@ public class SmartDataEngine {
             Function<T, R> mapper,
             Consumer<R> consumer
     ) {
-        // TODO
+            for (int i = 0; i < input.size(); i++) {
+                if (filter.test(input.get(i))) {
+                    consumer.accept(mapper.apply(input.get(i)));
+                }
+            }
     }
 
     // ============================================================
@@ -60,7 +67,12 @@ public class SmartDataEngine {
      */
     public static Optional<Double> safeDivide(double a, double b) {
         // TODO
-        return Optional.empty();
+        if (b == 0.0) {
+            return Optional.empty();
+        }
+        double result = a/b;
+
+        return Optional.of(result);
     }
 
     /**
@@ -79,7 +91,11 @@ public class SmartDataEngine {
      */
     public static double processDivision(double a, double b) {
         // TODO
-        return 0;
+        double quotient = safeDivide(a, b)
+                .map(x -> x*10)
+                .orElse(-1.0);
+
+        return quotient;
     }
 
     // ============================================================
@@ -100,16 +116,15 @@ public class SmartDataEngine {
      */
     public static Object transformObject(Object input) {
 
-        // Example structure (not solution):
+        Object transformed = switch (input) {
+            case Integer i -> i * i;
+            case String s -> s.toUpperCase();
+            case Double d -> Math.round(d);
+            default -> "Unsupported";
+        };
 
-        // return switch (input) {
-        //     case Integer i -> ...
-        //     case String s  -> ...
-        //     case Double d  -> ...
-        //     default -> ...
-        // };
+        return transformed;
 
-        return null;
     }
 
     // ============================================================
@@ -147,7 +162,13 @@ public class SmartDataEngine {
 
     public static Function<String, Integer> buildStringLengthPipeline() {
         // TODO
-        return null;
+        Function<String, String> trim = s -> s.trim();
+        Function<String, String> toLowerCase = s -> s.toLowerCase();
+        Function<String, Integer> length = s -> s.length();
+
+        Function<String, Integer> combined = trim.andThen(toLowerCase).andThen(length);
+
+        return combined;
     }
 
     // ============================================================
@@ -188,6 +209,19 @@ public class SmartDataEngine {
 
     public static void runScoreProcessor() {
         // TODO
+        Supplier<Integer> generateRandom = () ->  ThreadLocalRandom.current().nextInt(1, 101);
+        Predicate<Integer> filter = num -> num > 50;
+        Function<Integer, String> convertToString = num -> "Score: " + num;
+        Consumer<String> printer = System.out::println;
+        List<Integer> numbers = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            int random = generateRandom.get();
+            numbers.add(random);
+        }
+
+        pipeline(numbers, filter, convertToString, printer);
+
     }
 
 }
